@@ -15,8 +15,9 @@ class CreateLibroCaracteristicaTable extends Migration
     {
         Schema::create('libro_caracteristica', function (Blueprint $table) {
             $table->unsignedBigInteger('id_etiqueta');
-            $table->foreign('id_etiqueta')->references('id_etiqueta')->on('etiquetas');
             $table->unsignedBigInteger('id_libro');
+            $table->primary(['id_etiqueta', 'id_libro']);
+            $table->foreign('id_etiqueta')->references('id_etiqueta')->on('etiquetas');
             $table->foreign('id_libro')->references('id_libro')->on('libro');
             $table->string('valor');
         });
