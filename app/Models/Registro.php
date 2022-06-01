@@ -29,4 +29,18 @@ class Registro extends Model
      * @var string
      */
     protected $table = 'registro_asignacion';
+
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id_libro', 
+        'fecha_solicitud',
+        'fecha_asignacion',
+        'fecha_entrega', 
+        'user_solicitud',
+        'user_prestamo'
+    ];
 }
