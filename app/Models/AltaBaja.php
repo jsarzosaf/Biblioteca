@@ -29,4 +29,16 @@ class AltaBaja extends Model
      * @var string
      */
     protected $table = 'altas_bajas_ejemplares';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id_libro', 
+        'cantidad_ejemplares',
+        'tipo',
+        'motivo'
+    ];
 }
