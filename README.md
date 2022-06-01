@@ -20,11 +20,11 @@ todas las dependencias del proyecto.
 Siguiente paso será ejecutar las migraciones y seeder siguiendo la secuencia de comandos
 descritos acontinuación:
 
-php artisan migrate:install
-php artisan migrate:status
-php artisan migrate
-php artisan db:seed --class=EtiquetasSeeder
-php artisan db:seed --class=LibroSeeder
+- php artisan migrate:install
+- php artisan migrate:status
+- php artisan migrate
+- php artisan db:seed --class=EtiquetasSeeder
+- php artisan db:seed --class=LibroSeeder
 
 Ya ejecutados estos comandos ya tenemos la base de datos configurado con datos mínimos
 para poder probar los endpoints.
@@ -32,7 +32,7 @@ para poder probar los endpoints.
 Para proceder realizar las pruebas se debe levantar la aplicación con el siguiente 
 comando
 
-php artisan serve
+- php artisan serve
 
 Por defecto si no se especifica una dirección específica o puerto esta será la url
 de referencia para probar los endpoints: (http://127.0.0.1:8000)
