@@ -5,7 +5,7 @@
 Para poder instalar el proyecto se debe ejecutar el siguiente comando git 
 en su servidor web local
 
-https://github.com/jsarzosaf/Biblioteca.git
+- git clone https://github.com/jsarzosaf/Biblioteca.git
 
 Considerar que el repositorio es público.
 
