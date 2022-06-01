@@ -1,61 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
+## Instalación y configuración de base de datos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Para poder instalar el proyecto se debe ejecutar el siguiente comando git 
+en su servidor web local
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+https://github.com/jsarzosaf/Biblioteca.git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Considerar que el repositorio es público.
 
-## Learning Laravel
+Como siguiente paso se debe configurar el archivo .env, donde se toma como referencia
+el archivo .env.example, donde lo único que se debe agregar diferente son las conexiones
+de la gestor de base de datos y su respectivo nombre de la base de datos que se van
+ejecutar las migraciones.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Ya configurado el archivo .env, se ejecuta el comando composer install, para que instale 
+todas las dependencias del proyecto.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Siguiente paso será ejecutar las migraciones y seeder siguiendo la secuencia de comandos
+descritos acontinuación:
 
-## Laravel Sponsors
+php artisan migrate:install
+php artisan migrate:status
+php artisan migrate
+php artisan db:seed --class=EtiquetasSeeder
+php artisan db:seed --class=LibroSeeder
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Ya ejecutados estos comandos ya tenemos la base de datos configurado con datos mínimos
+para poder probar los endpoints.
 
-### Premium Partners
+Para proceder realizar las pruebas se debe levantar la aplicación con el siguiente 
+comando
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+php artisan serve
 
-## Contributing
+Por defecto si no se especifica una dirección específica o puerto esta será la url
+de referencia para probar los endpoints: (http://127.0.0.1:8000)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Pruebas de endpoints
 
-## Code of Conduct
+### Ruta para listar los libros activos de la biblioteca (GET)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Route::get('listar_libros/{etiqueta?}/{value?}', [BibliotecaController::class, 'getLibros']);
+  
+Si se le proporciona el parametro opcional etiqueta y value se indica que se hara una busqueda por etiquetas ambos se deben especificar para que de una busqueda exitosa. 
 
-## Security Vulnerabilities
+ http://127.0.0.1:8000/api/listar_libros/Autor/rowling
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Sino se indica ninguno de los parametros opcionales se retornara todos los libros disponibles.
 
-## License
+ http://127.0.0.1:8000/api/listar_libros
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### Ruta para poder prestar un libro(POST)
+
+Route::post('prestar_libro', [BibliotecaController::class, 'registerPrestamo']);
+
+Donde se debe especificar los siguiente parametros el identificador del libro (libro_id), la fecha de entrega que devolvera el libro, y el nombre del usuario que registra solicitud y el nombre del usuario solicitante
+
+http://127.0.0.1:8000/api/prestar_libro
+
+Ejemplo de payload entrada:
+
+{
+    "id_libro": 1,
+    "user_prestamo": "Jose",
+    "user_solicitud": "Camilo",
+    "fecha_entrega": "2022-06-15"
+}
+
+### Ruta para dar de altas libros en el sistema de la biblioteca(POST)
+
+Route::post('dar_alta_libro', [BibliotecaController::class, 'addStockLibro']);
+
+Se debe especificar el identificador del libro (libro_id), la cantidad de ejemplares de dar de alta, y el motivo de la alta que puede ser (migracion, donacion, compra, daño)
+
+http://127.0.0.1:8000/api/dar_alta_libro
+
+Ejemplo de payload entrada:
+
+{
+    "id_libro": 1,
+    "cantidad_ejemplares": 5,
+    "motivo": "donacion"
+}
+
