@@ -29,4 +29,39 @@ class Libro extends Model
      * @var string
      */
     protected $table = 'libro';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'ISBN', 
+        'titulo',
+        'subtilulo',
+        'estado', 
+        'version',
+        'numero_ejemplares',
+        'fecha_elaborado'
+    ];
+
+    /**
+     * Metodo para poder agregar ejemplares 
+     * de un libro dentro de la biblioteca
+     */
+    public function addStock($cantidadEjemplares)
+    {
+        $this->numero_ejemplares += $cantidadEjemplares;
+        $this->save();
+    }
+
+    /**
+     * Metodo para poder disminuir ejemplares 
+     * de un libro dentro de la biblioteca
+     */
+    public function removeStock($cantidadEjemplares)
+    {
+        $this->numero_ejemplares -= $cantidadEjemplares;
+        $this->save();
+    }
 }
